@@ -36,14 +36,11 @@ namespace WiFi {
         result = waitAtResponse("OK", "ERROR", "None", 1000)
 
         sendAtCmd("AT+SYSSTORE=0")
+        result = waitAtResponse("OK", "ERROR", "FAIL", 3000)
 
         // Convert BaudRate enum to number
-        let baudNum = 115200
-        if (baudRate as number == BaudRate.BaudRate9600 as number) baudNum = 9600
-        else if (baudRate as number == BaudRate.BaudRate19200 as number) baudNum = 19200
-        else if (baudRate as number == BaudRate.BaudRate38400 as number) baudNum = 38400
-        else if (baudRate as number == BaudRate.BaudRate57600 as number) baudNum = 57600
-        else if (baudRate as number == BaudRate.BaudRate115200 as number) baudNum = 115200
+        let baudNum = baudRate as number
+
 
         // If user wants different baud rate, configure ESP32
         if (baudNum != 115200) {
@@ -257,7 +254,7 @@ namespace WiFi {
                         let end = buffer.indexOf("\"", pos)
                         if (end > pos) {
                             found = buffer.substr(pos, end - pos)
-                            dbg("Found: " + found + " at " + buffer.length + " bytes")
+                            // dbg("Found: " + found + " at " + buffer.length + " bytes")
                             // Continue reading to drain buffer
                         }
                     }
@@ -285,7 +282,7 @@ namespace WiFi {
 
         if (found.length > 0) return found
         
-        dbg("No value in " + buffer.length + " bytes")
+        // dbg("No value in " + buffer.length + " bytes")
         return ""
     }
     /**
