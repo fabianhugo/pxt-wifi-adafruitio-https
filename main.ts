@@ -18,7 +18,7 @@ namespace WiFi {
     //% group="UartWiFi"
     //% txPin.defl=SerialPin.C17
     //% rxPin.defl=SerialPin.C16
-    //% baudRate.defl=BaudRate.BaudRate115200
+    //% baudRate.defl=BaudRate.BaudRate9600
     export function setupWifi(txPin: SerialPin, rxPin: SerialPin, baudRate: BaudRate, ssid: string, passwd: string) {
         let result = 0
 
