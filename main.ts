@@ -10,6 +10,7 @@ namespace WiFi {
      */
 
     let isWifiConnected = false;
+    let wifiBaudRate = BaudRate.BaudRate115200;
     /**
      * Setup Grove - Uart WiFi V2 to connect to  Wi-Fi
      */
@@ -22,15 +23,40 @@ namespace WiFi {
         let result = 0
 
         isWifiConnected = false
+        wifiBaudRate = baudRate
 
+        // Start with default ESP32 baud rate (115200)
         serial.redirect(
             txPin,
             rxPin,
-            baudRate
+            BaudRate.BaudRate115200
         )
 
         sendAtCmd("AT")
         result = waitAtResponse("OK", "ERROR", "None", 1000)
+
+        // Convert BaudRate enum to number
+        let baudNum = 115200
+        if (baudRate as number == BaudRate.BaudRate9600 as number) baudNum = 9600
+        else if (baudRate as number == BaudRate.BaudRate19200 as number) baudNum = 19200
+        else if (baudRate as number == BaudRate.BaudRate38400 as number) baudNum = 38400
+        else if (baudRate as number == BaudRate.BaudRate57600 as number) baudNum = 57600
+        else if (baudRate as number == BaudRate.BaudRate115200 as number) baudNum = 115200
+
+        // If user wants different baud rate, configure ESP32
+        if (baudNum != 115200) {
+            // Set ESP32 baud rate: AT+UART_DEF=baudrate,databits,stopbits,parity,flow
+            sendAtCmd("AT+UART_CUR=" + baudNum + ",8,1,0,0")
+            basic.pause(100)
+            
+            // Switch Calliope to new baud rate
+            serial.redirect(txPin, rxPin, baudRate)
+            basic.pause(100)
+            
+            // Test new baud rate
+            sendAtCmd("AT")
+            result = waitAtResponse("OK", "ERROR", "None", 1000)
+        }
 
         sendAtCmd("AT+CWMODE=1")
         result = waitAtResponse("OK", "ERROR", "None", 1000)
@@ -179,7 +205,7 @@ namespace WiFi {
     function dbg(msg: string) {
         serial.redirect(DBG_TX, DBG_RX, BaudRate.BaudRate115200)
         serial.writeLine("[DBG " + input.runningTime() + "] " + msg)
-        serial.redirect(WIFI_TX, WIFI_RX, BaudRate.BaudRate115200)
+        serial.redirect(WIFI_TX, WIFI_RX, wifiBaudRate)
     }
 
     export function adafruitIOGetValue(feed: string, username: string, aioKey: string): string {
