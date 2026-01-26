@@ -35,6 +35,8 @@ namespace WiFi {
         sendAtCmd("AT")
         result = waitAtResponse("OK", "ERROR", "None", 1000)
 
+        sendAtCmd("AT+SYSSTORE=0")
+
         // Convert BaudRate enum to number
         let baudNum = 115200
         if (baudRate as number == BaudRate.BaudRate9600 as number) baudNum = 9600
