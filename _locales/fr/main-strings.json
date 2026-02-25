@@ -5,11 +5,5 @@
     "WiFi.sendToThinkSpeak|block": "Envoyer des données à ThingSpeak|Write API Key %apiKey|Champ1 %field1|Champ2 %field2||Champ3 %field3|Champ4 %field4|Champ5 %field5|Champ6 %field6|Champ7 %field7|Champ8 %field8",
     "WiFi.sendToIFTTT|block": "Envoyer des données à l'événement IFTTT|Événement %event|Clé %key|valeur1 %value1||valeur2 %value2|valeur3 %value3",
     "WiFi.sendMessage|block": "Envoyer un message|Type %type|Serveur %address|Port %port|Message %message",
-    "WiFi.adafruitIOPost|block": "Adafruit IO POST|Nom d'utilisateur %username|Feed %feed|Valeur %value|Clé AIO %aioKey",
-    "WiFi.setupWifi|tooltip": "Configure le module Grove UART WiFi V2 et connecte au réseau WiFi.",
-    "WiFi.wifiOK|tooltip": "Retourne true si la connexion WiFi est active.",
-    "WiFi.sendToThinkSpeak|tooltip": "Envoie jusqu'à huit champs vers un canal ThingSpeak.",
-    "WiFi.sendToIFTTT|tooltip": "Déclenche un événement IFTTT avec jusqu'à trois valeurs.",
-    "WiFi.sendMessage|tooltip": "Envoie un message brut via TCP ou UDP.",
-    "WiFi.adafruitIOPost|tooltip": "Envoie une valeur via HTTP POST vers un feed Adafruit IO."
+    "WiFi.adafruitIOPost|block": "Adafruit IO POST|Nom d'utilisateur %username|Feed %feed|Valeur %value|Clé AIO %aioKey"
 }

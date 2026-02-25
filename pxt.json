@@ -10,9 +10,13 @@
         "main.ts",
         "README.md",
         "_locales/de/main-strings.json",
+        "_locales/de/main-jsdoc-strings.json",
         "_locales/it/main-strings.json",
+        "_locales/it/main-jsdoc-strings.json",
         "_locales/es/main-strings.json",
-        "_locales/fr/main-strings.json"
+        "_locales/es/main-jsdoc-strings.json",
+        "_locales/fr/main-strings.json",
+        "_locales/fr/main-jsdoc-strings.json"
     ],
     "testFiles": [],
     "targetVersions": {
