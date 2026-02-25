@@ -1,4 +1,7 @@
-
+enum MessageType {
+    UDP,
+    TCP
+}
 /**
  * Functions to operate Grove module.
  */
@@ -47,11 +50,11 @@ namespace WiFi {
             // Set ESP32 baud rate: AT+UART_DEF=baudrate,databits,stopbits,parity,flow
             sendAtCmd("AT+UART_CUR=" + baudNum + ",8,1,0,0")
             basic.pause(100)
-            
+
             // Switch Calliope to new baud rate
             serial.redirect(txPin, rxPin, baudRate)
             basic.pause(100)
-            
+
             // Test new baud rate
             sendAtCmd("AT")
             result = waitAtResponse("OK", "ERROR", "None", 1000)
@@ -172,6 +175,51 @@ namespace WiFi {
         }
     }
 
+    /**
+     * Send a raw message via TCP or UDP
+     */
+    //% block="Send Message|Type %type|Server %address|Port %port|Message %message"
+    //% group="UartWiFi"
+    //% weight=70
+    //% advanced=true
+    export function sendMessage(type: MessageType, address: string, port: number, message: string): void {
+        let result = 0
+        let retry = 2
+
+        // Determine protocol type
+        let protocol = (type == MessageType.TCP) ? "TCP" : "UDP"
+
+        // Close any previous connection
+        if (isWifiConnected) {
+            sendAtCmd("AT+CIPCLOSE")
+            waitAtResponse("OK", "ERROR", "None", 1000)
+        }
+
+        while (isWifiConnected && retry > 0) {
+            retry = retry - 1
+
+            // Establish connection (TCP or UDP)
+            sendAtCmd("AT+CIPSTART=\"" + protocol + "\",\"" + address + "\"," + port)
+            result = waitAtResponse("OK", "ALREADY CONNECTED", "ERROR", 3000)
+            if (result == 3) continue
+
+            // Send data length
+            sendAtCmd("AT+CIPSEND=" + message.length)
+            result = waitAtResponse(">", "OK", "ERROR", 2000)
+            if (result == 3) continue
+
+            // Send actual message
+            serial.writeString(message)
+            result = waitAtResponse("SEND OK", "SEND FAIL", "ERROR", 5000)
+
+            // Close connection
+            sendAtCmd("AT+CIPCLOSE")
+            waitAtResponse("OK", "ERROR", "None", 1000)
+
+            if (result == 1) break
+        }
+    }
+
     function waitAtResponse(target1: string, target2: string, target3: string, timeout: number) {
         let buffer = ""
         let start = input.runningTime()
@@ -192,7 +240,7 @@ namespace WiFi {
     function sendAtCmd(cmd: string) {
         serial.writeString(cmd + "\u000D\u000A")
     }
-    
+
 
 
     // Configure these to match your hardware
@@ -244,7 +292,7 @@ namespace WiFi {
                 buffer += chunk
                 lastDataTime = input.runningTime()
                 emptyReads = 0
-                
+
                 // Try to find value after each chunk (only if not found yet)
                 if (found.length == 0) {
                     let key = "\"value\":\""
@@ -259,7 +307,7 @@ namespace WiFi {
                         }
                     }
                 }
-                
+
                 // Exit if connection closed
                 if (chunk.includes("CLOSED")) break
             } else {
@@ -281,7 +329,7 @@ namespace WiFi {
         }
 
         if (found.length > 0) return found
-        
+
         // dbg("No value in " + buffer.length + " bytes")
         return ""
     }
