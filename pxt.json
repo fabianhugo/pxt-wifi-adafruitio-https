@@ -8,7 +8,11 @@
     },
     "files": [
         "main.ts",
-        "README.md"
+        "README.md",
+        "_locales/de/main-strings.json",
+        "_locales/it/main-strings.json",
+        "_locales/es/main-strings.json",
+        "_locales/fr/main-strings.json"
     ],
     "testFiles": [],
     "targetVersions": {
