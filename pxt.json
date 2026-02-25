@@ -1,0 +1,20 @@
+{
+    "name": "pxt-wifi-adafruitio",
+    "version": "0.2.0",
+    "description": "Grove UART WiFi V2 (ESP32-based) driver for Calliope mini. Supports ThingSpeak, IFTTT, and Adafruit IO over HTTP.",
+    "license": "MIT",
+    "dependencies": {
+        "core": "*"
+    },
+    "files": [
+        "main.ts",
+        "README.md"
+    ],
+    "testFiles": [],
+    "targetVersions": {
+        "target": ">=1.0.0"
+    },
+    "supportedTargets": [
+        "calliope"
+    ]
+}
